@@ -1,0 +1,63 @@
+# Translation of the WordPress plugin Term Management Tools 1.0 by scribu.
+# Copyright (C) 2010 scribu
+# This file is distributed under the same license as the Term Management Tools package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2010.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Term Management Tools 1.0\n"
+"Report-Msgid-Bugs-To: http://wordpress.org/tag/term-management-tools\n"
+"POT-Creation-Date: 2010-08-26 14:37+0300\n"
+"PO-Revision-Date: 2010-08-26 14:40+0200\n"
+"Last-Translator: scribu <scribu@gmail.com>\n"
+"Language-Team: ROMANIAN <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Language: Romanian\n"
+
+#: term-management-tools.php:84
+msgid "Terms updated."
+msgstr "Termenii au fost actualizați."
+
+#: term-management-tools.php:87
+msgid "Terms not updated."
+msgstr "Termenii nu au fost actualizați"
+
+#: term-management-tools.php:138
+msgid "Set parent"
+msgstr "Setează părinte"
+
+#: term-management-tools.php:139
+msgid "Merge"
+msgstr "Combină"
+
+#: term-management-tools.php:148
+#, php-format
+msgid "into: %s"
+msgstr "în: %s"
+
+#: term-management-tools.php:155
+msgid "None"
+msgstr "Fără"
+
+#. Plugin Name of the plugin/theme
+msgid "Term Management Tools"
+msgstr ""
+
+#. Description of the plugin/theme
+msgid "Allows you to merge terms and set term parents in bulk"
+msgstr ""
+
+#. Author of the plugin/theme
+msgid "scribu"
+msgstr ""
+
+#. Author URI of the plugin/theme
+msgid "http://scribu.net/"
+msgstr ""
+
+#. Tags of the plugin/theme
+msgid "admin, management, category, tag, term, hierarchy, taxonomy, organize"
+msgstr ""
+
