@@ -6,6 +6,7 @@ Description: Allows you to merge terms and set term parents in bulk
 Tags: admin, management, category, tag, term, hierarchy, taxonomy, organize
 Author: scribu
 Author URI: http://scribu.net/
+Plugin URI: http://scribu.net/wordpress/term-management-tools/
 Text Domain: term-management-tools
 Domain Path: /lang
 
