@@ -5,11 +5,12 @@ Version: 1.0
 Description: Allows you to merge terms and set term parents in bulk
 Author: scribu
 Author URI: http://scribu.net/
-Plugin URI: http://scribu.net/wordpress/term-management-tools/
+Plugin URI: http://scribu.net/wordpress/term-management-tools
 Text Domain: term-management-tools
 Domain Path: /lang
 
-Copyright (C) 2010 scribu.net (scribu@gmail.com)
+
+Copyright (C) 2010 Cristi Burcă (scribu@gmail.com)
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

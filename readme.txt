@@ -17,6 +17,8 @@ If you need to reorganize your tags and categories, this plugin will make it eas
 
 It works with tags, categories and [custom taxonomies](http://codex.wordpress.org/Custom_Taxonomies).
 
+Links: [Plugin News](http://scribu.net/wordpress/term-management-tools) | [Author's Site](http://scribu.net)
+
 == Installation ==
 
 You can either install it automatically from the WordPress admin, or do it manually:
