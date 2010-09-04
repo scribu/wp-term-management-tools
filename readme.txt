@@ -26,6 +26,8 @@ You can either install it automatically from the WordPress admin, or do it manua
 1. Unzip the "term-management-tools" archive and put the folder into your plugins folder (/wp-content/plugins/).
 1. Activate the plugin from the Plugins menu.
 
+Go to WP-Admin -> Posts -> Categories and reorganize away.
+
 == Screenshots ==
 
 1. Merge
