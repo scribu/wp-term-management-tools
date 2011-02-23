@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Term Management Tools
-Version: 1.0
+Version: 1.1-alpha
 Description: Allows you to merge terms and set term parents in bulk
 Author: scribu
 Author URI: http://scribu.net/
@@ -10,7 +10,7 @@ Text Domain: term-management-tools
 Domain Path: /lang
 
 
-Copyright (C) 2010 Cristi Burcă (scribu@gmail.com)
+Copyright ( C ) 2010 Cristi Burcă ( scribu@gmail.com )
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -57,23 +57,23 @@ class Term_Management_Tools {
 		if ( empty( $term_ids ) )
 			return;
 
-		$actions = array('set_parent', 'merge');
+		$actions = array( 'set_parent', 'merge' );
 
 		foreach ( $actions as $key ) {
 			if ( 'bulk_' . $key == @$_REQUEST['action'] || 'bulk_' . $key == @$_REQUEST['action2'] ) {
 				check_admin_referer( 'bulk-tags' );
-				$r = call_user_func( array(__CLASS__, $key ), $term_ids, $taxonomy );
+				$r = call_user_func( array( __CLASS__, $key ), $term_ids, $taxonomy );
 				break;
 			}
 		}
 
-		if ( !isset($r) )
+		if ( !isset( $r ) )
 			return;
 
 		if ( $referer = wp_get_referer() && false !== strpos( $referer, 'edit-tags.php' ) ) {
 			$location = $referer;
 		} else {
-			$location = add_query_arg('taxonomy', $taxonomy, 'edit-tags.php');
+			$location = add_query_arg( 'taxonomy', $taxonomy, 'edit-tags.php' );
 		}
 
 		wp_redirect( add_query_arg( 'message', $r ? 'tmt-updated' : 'tmt-error', $location ) );
@@ -88,9 +88,9 @@ class Term_Management_Tools {
 			echo '<div id="message" class="error"><p>' . __( 'Terms not updated.', 'term-management-tools' ) . '</p></div>';
 	}
 
-	function merge($term_ids, $taxonomy) {
+	function merge( $term_ids, $taxonomy ) {
 		$term_name = $_REQUEST['bulk_to_tag'];
-	
+
 		if ( !$term = term_exists( $term_name, $taxonomy ) )
 			$term = wp_insert_term( $term_name, $taxonomy );
 
@@ -112,14 +112,14 @@ class Term_Management_Tools {
 		return true;
 	}
 
-	function set_parent($term_ids, $taxonomy) {
+	function set_parent( $term_ids, $taxonomy ) {
 		$parent_id = $_REQUEST['parent'];
 
 		foreach ( $term_ids as $term_id ) {
 			if ( $term_id == $parent_id )
 				continue;
 
-			$ret = wp_update_term( $term_id, $taxonomy, array('parent' => $parent_id) );
+			$ret = wp_update_term( $term_id, $taxonomy, array( 'parent' => $parent_id ) );
 
 			if ( is_wp_error( $ret ) )
 				return false;
@@ -149,11 +149,11 @@ class Term_Management_Tools {
 		printf( __( 'into: %s', 'term-management-tools' ), '<input name="bulk_to_tag" type="text" size="20"></input>' );
 		echo "</div>\n";
 
-		if ( !is_taxonomy_hierarchical($taxonomy) )
+		if ( !is_taxonomy_hierarchical( $taxonomy ) )
 			return;
 
 		echo "<div id='tmt-input-set_parent' style='display:none'>\n";
-		wp_dropdown_categories(array('hide_empty' => 0, 'hide_if_empty' => false, 'name' => 'parent', 'orderby' => 'name', 'taxonomy' => $taxonomy, 'hierarchical' => true, 'show_option_none' => __('None', 'term-management-tools')));
+		wp_dropdown_categories( array( 'hide_empty' => 0, 'hide_if_empty' => false, 'name' => 'parent', 'orderby' => 'name', 'taxonomy' => $taxonomy, 'hierarchical' => true, 'show_option_none' => __( 'None', 'term-management-tools' ) ) );
 		echo "</div>\n";
 	}
 }
