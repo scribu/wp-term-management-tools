@@ -35,6 +35,21 @@ class Term_Management_Tools {
 		load_plugin_textdomain( 'term-management-tools', '', basename( dirname( __FILE__ ) ) . '/lang' );
 	}
 
+	private function get_actions( $taxonomy ) {
+		$actions = array(
+			'merge'        => __( 'Merge', 'term-management-tools' ),
+			'change_tax'   => __( 'Change Taxonomy', 'term-management-tools' ),
+		);
+
+		if ( is_taxonomy_hierarchical( $taxonomy ) ) {
+			$actions = array_merge( array(
+				'set_parent' => __( 'Set parent', 'term-management-tools' ),
+			), $actions );
+		}
+
+		return $actions;
+	}
+
 	function handler() {
 		$taxonomy = @$_REQUEST['taxonomy'];
 
@@ -57,12 +72,12 @@ class Term_Management_Tools {
 		if ( empty( $term_ids ) )
 			return;
 
-		$actions = array( 'set_parent', 'merge' );
+		$actions = array_keys( self::get_actions( $taxonomy ) );
 
 		foreach ( $actions as $key ) {
 			if ( 'bulk_' . $key == @$_REQUEST['action'] || 'bulk_' . $key == @$_REQUEST['action2'] ) {
 				check_admin_referer( 'bulk-tags' );
-				$r = call_user_func( array( __CLASS__, $key ), $term_ids, $taxonomy );
+				$r = call_user_func( array( __CLASS__, 'handle_' . $key ), $term_ids, $taxonomy );
 				break;
 			}
 		}
@@ -88,7 +103,7 @@ class Term_Management_Tools {
 			echo '<div id="message" class="error"><p>' . __( 'Terms not updated.', 'term-management-tools' ) . '</p></div>';
 	}
 
-	function merge( $term_ids, $taxonomy ) {
+	function handle_merge( $term_ids, $taxonomy ) {
 		$term_name = $_REQUEST['bulk_to_tag'];
 
 		if ( !$term = term_exists( $term_name, $taxonomy ) )
@@ -112,7 +127,7 @@ class Term_Management_Tools {
 		return true;
 	}
 
-	function set_parent( $term_ids, $taxonomy ) {
+	function handle_set_parent( $term_ids, $taxonomy ) {
 		$parent_id = $_REQUEST['parent'];
 
 		foreach ( $term_ids as $term_id ) {
@@ -128,6 +143,53 @@ class Term_Management_Tools {
 		return true;
 	}
 
+	function handle_change_tax( $term_ids, $taxonomy ) {
+		global $wpdb;
+
+		$new_tax = $_POST['new_tax'];
+
+		if ( !taxonomy_exists( $new_tax ) )
+			return false;
+
+		if ( $new_tax == $taxonomy )
+			return false;
+
+		foreach ( $term_ids as $term_id ) {
+			$term = get_term( $term_id, $taxonomy );
+
+			// The parent id will have to be reset in the new taxonomy
+			if ( $term->parent ) {
+				$wpdb->update( $wpdb->term_taxonomy,
+					array( 'parent' => 0 ),
+					array( 'term_taxonomy_id' => $term->term_taxonomy_id )
+				);
+			}
+
+			$tt_ids = array();
+
+			if ( isset( $_POST['children_new_tax'] ) ) {
+				$child_terms = get_terms( $taxonomy, array(
+					'child_of' => reset( $term_ids )
+				) );
+				
+				$tt_ids = wp_list_pluck( $child_terms, 'term_taxonomy_id' );
+			}
+
+			$tt_ids[] = $term->term_taxonomy_id;
+
+			$tt_ids = implode( ',', array_map( 'absint', $tt_ids ) );
+
+			$wpdb->query( $wpdb->prepare( "
+				UPDATE $wpdb->term_taxonomy SET taxonomy = %s WHERE term_taxonomy_id IN ($tt_ids)
+			", $new_tax ) );
+		}
+
+		delete_option( "{$taxonomy}_children" );
+		delete_option( "{$new_tax}_children" );
+
+		return true;
+	}
+
 	function script() {
 		global $taxonomy;
 
@@ -135,26 +197,57 @@ class Term_Management_Tools {
 
 		wp_enqueue_script( 'term-management-tools', plugins_url( "script$js_dev.js", __FILE__ ), array( 'jquery' ), '1.0' );
 
-		wp_localize_script( 'term-management-tools', 'tmtL10n', array(
-			'set_parent' => __( 'Set parent', 'term-management-tools' ),
-			'merge'      => __( 'Merge', 'term-management-tools' ),
-			'hierarchical' => is_taxonomy_hierarchical( $taxonomy ),
-		) );
+		wp_localize_script( 'term-management-tools', 'tmtL10n', self::get_actions( $taxonomy ) );
 	}
 
 	function inputs() {
 		global $taxonomy;
 
-		echo "<div id='tmt-input-merge' style='display:none'>\n";
+		foreach ( array_keys( self::get_actions( $taxonomy ) ) as $key ) {
+			echo "<div id='tmt-input-$key' style='display:none'>\n";
+			call_user_func( array( __CLASS__, 'input_' . $key ), $taxonomy );
+			echo "</div>\n";
+		}
+	}
+
+	function input_merge( $taxonomy ) {
 		printf( __( 'into: %s', 'term-management-tools' ), '<input name="bulk_to_tag" type="text" size="20"></input>' );
-		echo "</div>\n";
+	}
 
-		if ( !is_taxonomy_hierarchical( $taxonomy ) )
-			return;
+	function input_change_tax( $taxonomy ) {
+		$tax_list = get_taxonomies( array(
+			'show_ui' => true,
+			'hierarchical' => is_taxonomy_hierarchical( $taxonomy ) 
+		), 'objects' );
+?>
+		<select class="postform" name="new_tax">
 
-		echo "<div id='tmt-input-set_parent' style='display:none'>\n";
-		wp_dropdown_categories( array( 'hide_empty' => 0, 'hide_if_empty' => false, 'name' => 'parent', 'orderby' => 'name', 'taxonomy' => $taxonomy, 'hierarchical' => true, 'show_option_none' => __( 'None', 'term-management-tools' ) ) );
-		echo "</div>\n";
+<?php
+		foreach ( $tax_list as $name => $tax_obj ) {
+			echo "<option value='$name'" . selected( $name, $taxonomy, false ) . ">{$tax_obj->label}</option>\n";
+		}
+?>
+		</select>
+		
+		<?php if ( is_taxonomy_hierarchical( $taxonomy ) ) { ?>
+		<label for="children_new_tax">
+			<input type="checkbox" id="children_new_tax" name="children_new_tax" value="1" checked />
+			<?php _e( 'children too', 'term-management-tools' ); ?>
+		</label>
+<?php
+		}
+	}
+
+	function input_set_parent( $taxonomy ) {
+		wp_dropdown_categories( array(
+			'hide_empty' => 0,
+			'hide_if_empty' => false,
+			'name' => 'parent',
+			'orderby' => 'name',
+			'taxonomy' => $taxonomy,
+			'hierarchical' => true,
+			'show_option_none' => __( 'None', 'term-management-tools' )
+		) );
 	}
 }
 

@@ -1,34 +1,34 @@
-jQuery(document).ready(function($) {
-	var l10n = window.tmtL10n,
-	    actions = ['merge'];
+jQuery(function($) {
+	var actions = [];
 
-	if ( l10n.hierarchical )
-		actions.push('set_parent');
-
-	$.each(actions, function(i, val) {
-		actions[i] = {
-			action: 'bulk_' + val,
-			name: l10n[val],
-			el: $('#tmt-input-' + val)
-		}
+	$.each(tmtL10n, function(key, title) {
+		actions.unshift({
+			action: 'bulk_' + key,
+			name: title,
+			el: $('#tmt-input-' + key)
+		});
 	});
 
 	$('.actions select')
 	.each(function() {
 		var $option = $(this).find('option:first');
 
-		$.each(actions, function() {
-			$option.after($('<option>', {value: this.action, html: this.name}));
+		$.each(actions, function(i, actionObj) {
+			$option.after( $('<option>', {value: actionObj.action, html: actionObj.name}) );
 		});
 	})
 	.change(function() {
-		var $self = $(this);
+		var $select = $(this);
 
-		$.each(actions, function() {
-			if ( $self.val() == this.action ) {
-				this.el.insertAfter($self).css('display', 'inline').find(':input').focus();
+		$.each(actions, function(i, actionObj) {
+			if ( $select.val() === actionObj.action ) {
+				actionObj.el
+					.insertAfter( $select )
+					.css('display', 'inline')
+					.find(':input').focus();
 			} else {
-				this.el.css('display', 'none');
+				actionObj.el
+					.css('display', 'none');
 			}
 		});
 	});

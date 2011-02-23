@@ -35,6 +35,9 @@ Go to WP-Admin -> Posts -> Categories and reorganize away.
 
 == Changelog ==
 
+= 1.1 =
+* added 'Change Taxonomy' action
+
 = 1.0 =
 * initial release
 * [more info](http://scribu.net/wordpress/term-management-tools/tmt-1-0.html)
