@@ -2,6 +2,9 @@ jQuery(function($) {
 	var actions = [];
 
 	$.each(tmtL10n, function(key, title) {
+		if ( 'warning' == key )
+			return;
+
 		actions.unshift({
 			action: 'bulk_' + key,
 			name: title,

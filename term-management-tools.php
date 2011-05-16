@@ -154,10 +154,10 @@ class Term_Management_Tools {
 		if ( $new_tax == $taxonomy )
 			return false;
 
+		$tt_ids = array();
 		foreach ( $term_ids as $term_id ) {
 			$term = get_term( $term_id, $taxonomy );
 
-			// The parent id will have to be reset in the new taxonomy
 			if ( $term->parent ) {
 				$wpdb->update( $wpdb->term_taxonomy,
 					array( 'parent' => 0 ),
@@ -165,23 +165,24 @@ class Term_Management_Tools {
 				);
 			}
 
-			$tt_ids = array();
-
-			if ( isset( $_POST['children_new_tax'] ) ) {
-				$child_terms = get_terms( $taxonomy, array(
-					'child_of' => reset( $term_ids )
-				) );
-				
-				$tt_ids = wp_list_pluck( $child_terms, 'term_taxonomy_id' );
-			}
-
 			$tt_ids[] = $term->term_taxonomy_id;
 
-			$tt_ids = implode( ',', array_map( 'absint', $tt_ids ) );
+			if ( is_taxonomy_hierarchical( $taxonomy ) ) {
+				$child_terms = get_terms( $taxonomy, array(
+					'child_of' => $term_id,
+					'hide_empty' => false
+				) );
+				$tt_ids = array_merge( $tt_ids, wp_list_pluck( $child_terms, 'term_taxonomy_id' ) );
+			}
+		}
+		$tt_ids = implode( ',', array_map( 'absint', $tt_ids ) );
 
-			$wpdb->query( $wpdb->prepare( "
-				UPDATE $wpdb->term_taxonomy SET taxonomy = %s WHERE term_taxonomy_id IN ($tt_ids)
-			", $new_tax ) );
+		$wpdb->query( $wpdb->prepare( "
+			UPDATE $wpdb->term_taxonomy SET taxonomy = %s WHERE term_taxonomy_id IN ($tt_ids)
+		", $new_tax ) );
+
+		if ( is_taxonomy_hierarchical( $taxonomy ) && !is_taxonomy_hierarchical( $new_tax ) ) {
+			$wpdb->query( "UPDATE $wpdb->term_taxonomy SET parent = 0 WHERE term_taxonomy_id IN ($tt_ids)" );
 		}
 
 		delete_option( "{$taxonomy}_children" );
@@ -197,7 +198,11 @@ class Term_Management_Tools {
 
 		wp_enqueue_script( 'term-management-tools', plugins_url( "script$js_dev.js", __FILE__ ), array( 'jquery' ), '1.0' );
 
-		wp_localize_script( 'term-management-tools', 'tmtL10n', self::get_actions( $taxonomy ) );
+		$strings = self::get_actions( $taxonomy );
+
+		$strings['warning'] = __( 'You are about to convert terms from a hierarchical taxonomy to a linear taxonomy.', 'term-management-tools' );
+
+		wp_localize_script( 'term-management-tools', 'tmtL10n', $strings );
 	}
 
 	function inputs() {
@@ -215,27 +220,24 @@ class Term_Management_Tools {
 	}
 
 	function input_change_tax( $taxonomy ) {
-		$tax_list = get_taxonomies( array(
-			'show_ui' => true,
-			'hierarchical' => is_taxonomy_hierarchical( $taxonomy ) 
-		), 'objects' );
+		$tax_list = get_taxonomies( array( 'show_ui' => true ), 'objects' );
 ?>
 		<select class="postform" name="new_tax">
-
 <?php
-		foreach ( $tax_list as $name => $tax_obj ) {
-			echo "<option value='$name'" . selected( $name, $taxonomy, false ) . ">{$tax_obj->label}</option>\n";
+		foreach ( $tax_list as $new_tax => $tax_obj ) {
+			if ( $new_tax == $taxonomy )
+				continue;
+
+			echo "<option value='$new_tax'";
+
+			if ( is_taxonomy_hierarchical( $taxonomy ) && !is_taxonomy_hierarchical( $new_tax ) )
+				echo " data-loose-hierarchy='1'";
+
+			echo ">{$tax_obj->label}</option>\n";
 		}
 ?>
 		</select>
-		
-		<?php if ( is_taxonomy_hierarchical( $taxonomy ) ) { ?>
-		<label for="children_new_tax">
-			<input type="checkbox" id="children_new_tax" name="children_new_tax" value="1" checked />
-			<?php _e( 'children too', 'term-management-tools' ); ?>
-		</label>
 <?php
-		}
 	}
 
 	function input_set_parent( $taxonomy ) {
