@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Term Management Tools
-Version: 1.1-alpha
+Version: 1.1
 Description: Allows you to merge terms and set term parents in bulk
 Author: scribu
 Author URI: http://scribu.net/
@@ -196,7 +196,7 @@ class Term_Management_Tools {
 
 		$js_dev = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '.dev' : '';
 
-		wp_enqueue_script( 'term-management-tools', plugins_url( "script$js_dev.js", __FILE__ ), array( 'jquery' ), '1.0' );
+		wp_enqueue_script( 'term-management-tools', plugins_url( "script$js_dev.js", __FILE__ ), array( 'jquery' ), '1.1' );
 
 		wp_localize_script( 'term-management-tools', 'tmtL10n', self::get_actions( $taxonomy ) );
 	}
