@@ -198,11 +198,7 @@ class Term_Management_Tools {
 
 		wp_enqueue_script( 'term-management-tools', plugins_url( "script$js_dev.js", __FILE__ ), array( 'jquery' ), '1.0' );
 
-		$strings = self::get_actions( $taxonomy );
-
-		$strings['warning'] = __( 'You are about to convert terms from a hierarchical taxonomy to a linear taxonomy.', 'term-management-tools' );
-
-		wp_localize_script( 'term-management-tools', 'tmtL10n', $strings );
+		wp_localize_script( 'term-management-tools', 'tmtL10n', self::get_actions( $taxonomy ) );
 	}
 
 	function inputs() {
@@ -228,12 +224,7 @@ class Term_Management_Tools {
 			if ( $new_tax == $taxonomy )
 				continue;
 
-			echo "<option value='$new_tax'";
-
-			if ( is_taxonomy_hierarchical( $taxonomy ) && !is_taxonomy_hierarchical( $new_tax ) )
-				echo " data-loose-hierarchy='1'";
-
-			echo ">{$tax_obj->label}</option>\n";
+			echo "<option value='$new_tax'>$tax_obj->label</option>\n";
 		}
 ?>
 		</select>
