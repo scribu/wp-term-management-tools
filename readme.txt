@@ -14,6 +14,7 @@ If you need to reorganize your tags and categories, this plugin will make it eas
 
 * Merge - combine two or more terms into one
 * Set parent - set the parent for one or more terms (for hierarchical taxonomies)
+* Change taxonomy - convert terms from one taxonomy to another
 
 It works with tags, categories and [custom taxonomies](http://codex.wordpress.org/Custom_Taxonomies).
 
@@ -36,7 +37,7 @@ Go to WP-Admin -> Posts -> Categories and reorganize away.
 == Changelog ==
 
 = 1.1 =
-* added 'Change Taxonomy' action
+* added 'Change taxonomy' action
 
 = 1.0 =
 * initial release

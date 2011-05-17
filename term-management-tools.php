@@ -38,7 +38,7 @@ class Term_Management_Tools {
 	private function get_actions( $taxonomy ) {
 		$actions = array(
 			'merge'        => __( 'Merge', 'term-management-tools' ),
-			'change_tax'   => __( 'Change Taxonomy', 'term-management-tools' ),
+			'change_tax'   => __( 'Change taxonomy', 'term-management-tools' ),
 		);
 
 		if ( is_taxonomy_hierarchical( $taxonomy ) ) {
