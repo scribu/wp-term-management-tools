@@ -8,8 +8,6 @@ Author URI: http://scribu.net/
 Plugin URI: http://scribu.net/wordpress/term-management-tools
 Text Domain: term-management-tools
 Domain Path: /lang
-License: GPLv2 or later
-License URI: http://www.gnu.org/licenses/gpl-2.0.html
 */
 
 class Term_Management_Tools {
