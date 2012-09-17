@@ -93,11 +93,18 @@ class Term_Management_Tools {
 	}
 
 	function notice() {
-		if ( 'tmt-updated' == @$_GET['message'] )
-			echo '<div id="message" class="updated"><p>' . __( 'Terms updated.', 'term-management-tools' ) . '</p></div>';
+		if ( !isset( $_GET['message'] ) )
+			return;
 
-		if ( 'tmt-error' == @$_GET['message'] )
+		switch ( $_GET['message'] ) {
+		case  'tmt-updated':
+			echo '<div id="message" class="updated"><p>' . __( 'Terms updated.', 'term-management-tools' ) . '</p></div>';
+			break;
+
+		case 'tmt-error':
 			echo '<div id="message" class="error"><p>' . __( 'Terms not updated.', 'term-management-tools' ) . '</p></div>';
+			break;
+		}
 	}
 
 	function handle_merge( $term_ids, $taxonomy ) {
