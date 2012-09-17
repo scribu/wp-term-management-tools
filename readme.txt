@@ -1,13 +1,13 @@
 === Term Management Tools ===
 Contributors: scribu
 Tags: admin, category, tag, term, taxonomy, hierarchy, organize, manage
-Requires at least: 3.0
-Tested up to: 3.2
-Stable tag: trunk
+Requires at least: 3.2
+Tested up to: 3.4
+Stable tag: 1.1.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Allows you to merge terms and set term parents in bulk
+Allows you to merge terms, set term parents in bulk, and swap term taxonomies.
 
 == Description ==
 
@@ -36,6 +36,10 @@ Go to WP-Admin -> Posts -> Categories and reorganize away.
 2. Set parent
 
 == Changelog ==
+
+= 1.1.1 =
+* fixed error notices
+* added Persian translation
 
 = 1.1 =
 * added 'Change taxonomy' action
