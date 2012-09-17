@@ -35,15 +35,18 @@ class Term_Management_Tools {
 	}
 
 	function handler() {
-		$taxonomy = @$_REQUEST['taxonomy'];
+		$defaults = array(
+			'taxonomy' => 'post_tag',
+			'delete_tags' => false,
+			'action' => false,
+			'action2' => false
+		);
 
-		if ( empty( $taxonomy ) )
-			$taxonomy = 'post_tag';
+		$data = shortcode_atts( $defaults, $_REQUEST );
 
-		if ( !taxonomy_exists( $taxonomy ) )
+		$tax = get_taxonomy( $data['taxonomy'] );
+		if ( !$tax )
 			return;
-
-		$tax = get_taxonomy( $taxonomy );
 
 		if ( !current_user_can( $tax->cap->manage_terms ) )
 			return;
@@ -51,15 +54,25 @@ class Term_Management_Tools {
 		add_action( 'admin_enqueue_scripts', array( __CLASS__, 'script' ) );
 		add_action( 'admin_footer', array( __CLASS__, 'inputs' ) );
 
-		$term_ids = @$_REQUEST['delete_tags'];
+		$action = false;
+		foreach ( array( 'action', 'action2' ) as $key ) {
+			if ( $data[ $key ] && '-1' != $data[ $key ] ) {
+				$action = $data[ $key ];
+			}
+		}
 
+		if ( !$action )
+			return;
+
+		self::delegate_handling( $action, $data['taxonomy'], $data['delete_tags'] );
+	}
+
+	protected static function delegate_handling( $action, $taxonomy, $term_ids ) {
 		if ( empty( $term_ids ) )
 			return;
 
-		$actions = array_keys( self::get_actions( $taxonomy ) );
-
-		foreach ( $actions as $key ) {
-			if ( 'bulk_' . $key == @$_REQUEST['action'] || 'bulk_' . $key == @$_REQUEST['action2'] ) {
+		foreach ( array_keys( self::get_actions( $taxonomy ) ) as $key ) {
+			if ( 'bulk_' . $key == $action ) {
 				check_admin_referer( 'bulk-tags' );
 				$r = call_user_func( array( __CLASS__, 'handle_' . $key ), $term_ids, $taxonomy );
 				break;
