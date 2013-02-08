@@ -3,7 +3,7 @@ Contributors: scribu
 Tags: admin, category, tag, term, taxonomy, hierarchy, organize, manage
 Requires at least: 3.2
 Tested up to: 3.4
-Stable tag: 1.1.1
+Stable tag: trunk
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -19,6 +19,12 @@ If you need to reorganize your tags and categories, this plugin will make it eas
 
 It works with tags, categories and [custom taxonomies](http://codex.wordpress.org/Custom_Taxonomies).
 
+= Usage =
+
+1. Go to `WP-Admin -> Posts -> Categories`.
+2. Find the Bulk Actions dropdown.
+3. Reorganize away.
+
 Links: [Plugin News](http://scribu.net/wordpress/term-management-tools) | [Author's Site](http://scribu.net)
 
 == Installation ==
@@ -27,8 +33,6 @@ You can either install it automatically from the WordPress admin, or do it manua
 
 1. Unzip the "term-management-tools" archive and put the folder into your plugins folder (/wp-content/plugins/).
 1. Activate the plugin from the Plugins menu.
-
-Go to WP-Admin -> Posts -> Categories and reorganize away.
 
 == Screenshots ==
 
