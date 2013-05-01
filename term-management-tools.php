@@ -120,19 +120,11 @@ class Term_Management_Tools {
 
 		$to_term_obj = get_term( $to_term, $taxonomy );
 
-		if( empty( $to_term_obj ) || is_wp_error( $to_term_obj ) ) {
-			$to_term_obj = new stdClass();	//define empty object so stuff doesn't break below in actions
-		}
-
 		foreach ( $term_ids as $term_id ) {
 			if ( $term_id == $to_term )
 				continue;
 
 			$term_obj = get_term( $term_id, $taxonomy );
-
-			if( empty( $term_obj ) || is_wp_error( $term_obj ) ) {
-				$term_obj = new stdClass();	//define empty object so stuff doesn't break below in actions
-			}
 
 			$ret = wp_delete_term( $term_id, $taxonomy, array( 'default' => $to_term, 'force_default' => true ) );
 
@@ -145,8 +137,6 @@ class Term_Management_Tools {
 
 			unset( $term_obj );
 		}
-
-		unset( $to_term_obj );
 
 		return true;
 	}
