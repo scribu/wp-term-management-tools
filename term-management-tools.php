@@ -124,7 +124,7 @@ class Term_Management_Tools {
 			if ( $term_id == $to_term )
 				continue;
 
-			$term_obj = get_term( $term_id, $taxonomy );
+			$old_term = get_term( $term_id, $taxonomy );
 
 			$ret = wp_delete_term( $term_id, $taxonomy, array( 'default' => $to_term, 'force_default' => true ) );
 
@@ -132,10 +132,7 @@ class Term_Management_Tools {
 				return false;
 			}
 
-			//this hook passes objects of the merged tag and the tag merged into
-			do_action( 'term_management_tools_term_merged', $to_term_obj, $term_obj );
-
-			unset( $term_obj );
+			do_action( 'term_management_tools_term_merged', $to_term_obj, $old_term );
 		}
 
 		return true;
