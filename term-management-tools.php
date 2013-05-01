@@ -127,9 +127,8 @@ class Term_Management_Tools {
 			$old_term = get_term( $term_id, $taxonomy );
 
 			$ret = wp_delete_term( $term_id, $taxonomy, array( 'default' => $to_term, 'force_default' => true ) );
-
 			if ( is_wp_error( $ret ) ) {
-				return false;
+				continue;
 			}
 
 			do_action( 'term_management_tools_term_merged', $to_term_obj, $old_term );
