@@ -118,14 +118,24 @@ class Term_Management_Tools {
 
 		$to_term = $term['term_id'];
 
+		$to_term_obj = get_term( $to_term, $taxonomy );
+
 		foreach ( $term_ids as $term_id ) {
 			if ( $term_id == $to_term )
 				continue;
 
+			$term_obj = get_term( $term_id, $taxonomy );
+
 			$ret = wp_delete_term( $term_id, $taxonomy, array( 'default' => $to_term, 'force_default' => true ) );
 
-			if ( is_wp_error( $ret ) )
+			if ( is_wp_error( $ret ) ) {
 				return false;
+			}
+
+			//this hook passes objects of the merged tag and the tag merged into
+			do_action( 'term_management_tools_term_merged', $to_term_obj, $term_obj );
+
+			unset( $term_obj );
 		}
 
 		return true;
