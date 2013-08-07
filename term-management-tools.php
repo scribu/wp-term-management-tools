@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Term Management Tools
-Version: 1.1.2
+Version: 1.1.3-alpha
 Description: Allows you to merge terms and set term parents in bulk
 Author: scribu
 Author URI: http://scribu.net/
@@ -12,14 +12,14 @@ Domain Path: /lang
 
 class Term_Management_Tools {
 
-	function init() {
+	static function init() {
 		add_action( 'load-edit-tags.php', array( __CLASS__, 'handler' ) );
 		add_action( 'admin_notices', array( __CLASS__, 'notice' ) );
 
 		load_plugin_textdomain( 'term-management-tools', '', basename( dirname( __FILE__ ) ) . '/lang' );
 	}
 
-	private function get_actions( $taxonomy ) {
+	private static function get_actions( $taxonomy ) {
 		$actions = array(
 			'merge'        => __( 'Merge', 'term-management-tools' ),
 			'change_tax'   => __( 'Change taxonomy', 'term-management-tools' ),
@@ -34,7 +34,7 @@ class Term_Management_Tools {
 		return $actions;
 	}
 
-	function handler() {
+	static function handler() {
 		$defaults = array(
 			'taxonomy' => 'post_tag',
 			'delete_tags' => false,
@@ -92,7 +92,7 @@ class Term_Management_Tools {
 		die;
 	}
 
-	function notice() {
+	static function notice() {
 		if ( !isset( $_GET['message'] ) )
 			return;
 
@@ -107,7 +107,7 @@ class Term_Management_Tools {
 		}
 	}
 
-	function handle_merge( $term_ids, $taxonomy ) {
+	static function handle_merge( $term_ids, $taxonomy ) {
 		$term_name = $_REQUEST['bulk_to_tag'];
 
 		if ( !$term = term_exists( $term_name, $taxonomy ) )
@@ -137,7 +137,7 @@ class Term_Management_Tools {
 		return true;
 	}
 
-	function handle_set_parent( $term_ids, $taxonomy ) {
+	static function handle_set_parent( $term_ids, $taxonomy ) {
 		$parent_id = $_REQUEST['parent'];
 
 		foreach ( $term_ids as $term_id ) {
@@ -153,7 +153,7 @@ class Term_Management_Tools {
 		return true;
 	}
 
-	function handle_change_tax( $term_ids, $taxonomy ) {
+	static function handle_change_tax( $term_ids, $taxonomy ) {
 		global $wpdb;
 
 		$new_tax = $_POST['new_tax'];
@@ -201,7 +201,7 @@ class Term_Management_Tools {
 		return true;
 	}
 
-	function script() {
+	static function script() {
 		global $taxonomy;
 
 		$js_dev = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '.dev' : '';
@@ -211,7 +211,7 @@ class Term_Management_Tools {
 		wp_localize_script( 'term-management-tools', 'tmtL10n', self::get_actions( $taxonomy ) );
 	}
 
-	function inputs() {
+	static function inputs() {
 		global $taxonomy;
 
 		foreach ( array_keys( self::get_actions( $taxonomy ) ) as $key ) {
@@ -221,11 +221,11 @@ class Term_Management_Tools {
 		}
 	}
 
-	function input_merge( $taxonomy ) {
+	static function input_merge( $taxonomy ) {
 		printf( __( 'into: %s', 'term-management-tools' ), '<input name="bulk_to_tag" type="text" size="20"></input>' );
 	}
 
-	function input_change_tax( $taxonomy ) {
+	static function input_change_tax( $taxonomy ) {
 		$tax_list = get_taxonomies( array( 'show_ui' => true ), 'objects' );
 ?>
 		<select class="postform" name="new_tax">
@@ -241,7 +241,7 @@ class Term_Management_Tools {
 <?php
 	}
 
-	function input_set_parent( $taxonomy ) {
+	static function input_set_parent( $taxonomy ) {
 		wp_dropdown_categories( array(
 			'hide_empty' => 0,
 			'hide_if_empty' => false,
