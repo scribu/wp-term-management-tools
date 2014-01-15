@@ -168,13 +168,11 @@ class Term_Management_Tools {
 		foreach ( $term_ids as $term_id ) {
 			$term = get_term( $term_id, $taxonomy );
 
-			if ( $term->parent ) {
-				if (!in_array($term->parent,$term_ids)) {
-					$wpdb->update( $wpdb->term_taxonomy,
-						array( 'parent' => 0 ),
-						array( 'term_taxonomy_id' => $term->term_taxonomy_id )
-					);
-				}
+			if ( $term->parent && !in_array( $term->parent,$term_ids ) ) {
+				$wpdb->update( $wpdb->term_taxonomy,
+					array( 'parent' => 0 ),
+					array( 'term_taxonomy_id' => $term->term_taxonomy_id )
+				);
 			}
 
 			$tt_ids[] = $term->term_taxonomy_id;
