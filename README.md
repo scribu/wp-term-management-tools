@@ -2,8 +2,8 @@
 Contributors: scribu  
 Tags: admin, category, tag, term, taxonomy, hierarchy, organize, manage  
 Requires at least: 3.2  
-Tested up to: 3.5  
-Stable tag: 1.1.2  
+Tested up to: 3.8  
+Stable tag: 1.1.3  
 License: GPLv2 or later  
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -40,6 +40,9 @@ You can either install it automatically from the WordPress admin, or do it manua
 2. Set parent
 
 ## Changelog 
+
+### 1.1.3
+* preserve term hierarchy when switching taxonomies. props Chris Caller
 
 ### 1.1.2 
 * added 'term_management_tools_term_merged' action hook. props Amit Gupta
