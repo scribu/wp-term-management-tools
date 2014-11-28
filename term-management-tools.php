@@ -82,7 +82,8 @@ class Term_Management_Tools {
 		if ( !isset( $r ) )
 			return;
 
-		if ( $referer = wp_get_referer() && false !== strpos( $referer, 'edit-tags.php' ) ) {
+		$referer = wp_get_referer();
+		if ( $referer && false !== strpos( $referer, 'edit-tags.php' ) ) {
 			$location = $referer;
 		} else {
 			$location = add_query_arg( 'taxonomy', $taxonomy, 'edit-tags.php' );
