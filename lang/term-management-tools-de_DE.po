@@ -1,0 +1,44 @@
+# Copyright (C) 2010 
+# This file is distributed under the same license as the  package.
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: http://wordpress.org/tag/tmt\n"
+"POT-Creation-Date: 2011-05-17 00:24:33+00:00\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"PO-Revision-Date: 2015-04-04 12:57+0100\n"
+"Last-Translator: Jochen Damm <jochen.damm@hotmail.de>\n"
+"Language-Team: \n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Language: de_DE\n"
+
+#: term-management-tools.php:40
+msgid "Merge"
+msgstr "Vereinigen"
+
+#: term-management-tools.php:41
+msgid "Change taxonomy"
+msgstr "Ändere Taxonomie"
+
+#: term-management-tools.php:46
+msgid "Set parent"
+msgstr "Setze Eltern"
+
+#: term-management-tools.php:100
+msgid "Terms updated."
+msgstr "Bezeichnungen aktualisiert."
+
+#: term-management-tools.php:103
+msgid "Terms not updated."
+msgstr "Bezeichnungen nicht aktualisiert."
+
+#: term-management-tools.php:215
+msgid "into: %s"
+msgstr "in: %s"
+
+#: term-management-tools.php:242
+msgid "None"
+msgstr "Nichts"
