@@ -89,6 +89,10 @@ class Term_Management_Tools {
 			$location = add_query_arg( 'taxonomy', $taxonomy, 'edit-tags.php' );
 		}
 
+		if ( isset( $_REQUEST['post_type'] ) && 'post' != $_REQUEST['post_type'] ) {
+			$location = add_query_arg( 'post_type', $_REQUEST['post_type'], $location );
+		}
+
 		wp_redirect( add_query_arg( 'message', $r ? 'tmt-updated' : 'tmt-error', $location ) );
 		die;
 	}
