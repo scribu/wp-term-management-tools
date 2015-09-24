@@ -203,7 +203,7 @@ class Term_Management_Tools {
 		delete_option( "{$taxonomy}_children" );
 		delete_option( "{$new_tax}_children" );
 		
-		do_action( 'term_management_tools_term_changed_taxonomy', $tt_ids, $new_tax );
+		do_action( 'term_management_tools_term_changed_taxonomy', $tt_ids, $new_tax, $taxonomy );
 
 		return true;
 	}
