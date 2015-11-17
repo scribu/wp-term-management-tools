@@ -25,7 +25,11 @@ It works with tags, categories and [custom taxonomies](http://codex.wordpress.or
 2. Find the Bulk Actions dropdown.
 3. Reorganize away.
 
-Links: [Plugin News](http://scribu.net/wordpress/term-management-tools) | [Author's Site](http://scribu.net)
+### No support
+
+I, scribu, will not be offering support for this plugin anymore (either free or paid).
+
+Fixes are submitted by other contributors, on [Github](https://github.com/scribu/wp-term-management-tools).
 
 ## Installation 
 
