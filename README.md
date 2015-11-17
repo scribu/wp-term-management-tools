@@ -2,8 +2,8 @@
 Contributors: scribu  
 Tags: admin, category, tag, term, taxonomy, hierarchy, organize, manage  
 Requires at least: 3.2  
-Tested up to: 3.8  
-Stable tag: 1.1.3  
+Tested up to: 4.3  
+Stable tag: 1.1.4  
 License: GPLv2 or later  
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -40,6 +40,12 @@ You can either install it automatically from the WordPress admin, or do it manua
 2. Set parent
 
 ## Changelog 
+
+### 1.1.4
+* improved taxonomy cache cleaning. props Mustafa Uysal
+* added 'term_management_tools_term_changed_taxonomy' action hook. props Daniel Bachhuber
+* fixed redirection for taxonomies attached to custom post types. props Thomas Bartels
+* added Japanese translation. props mt8
 
 ### 1.1.3
 * preserve term hierarchy when switching taxonomies. props Chris Caller

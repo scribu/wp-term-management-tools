@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Term Management Tools
-Version: 1.1.3
+Version: 1.1.4
 Description: Allows you to merge terms and set term parents in bulk
 Author: scribu
 Author URI: http://scribu.net/
