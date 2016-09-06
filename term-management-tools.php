@@ -241,7 +241,7 @@ class Term_Management_Tools {
 			if ( $new_tax == $taxonomy )
 				continue;
 
-			echo "<option value='$new_tax'>$tax_obj->label</option>\n";
+			echo '<option value="' . esc_attr( $new_tax ) . '">' . esc_html( $tax_obj->label ) . '</option>\n';
 		}
 ?>
 		</select>
